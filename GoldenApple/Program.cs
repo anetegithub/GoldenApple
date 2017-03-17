@@ -10,6 +10,7 @@ namespace GoldenApple
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
