@@ -16,13 +16,16 @@ namespace GoldenApple
         //}
 
         //if we not use accessors, why we declare them (also, with overflow)?
+        //we may use auto-property for setting accessors later, like entity framework or something
         public int Variable { get; set; }
+        //or, we can declare field for 'just' store value
+        int _Valiable;
 
-        static void Main(string[] args)
+        public static void Run(string[] args)
         {
             Test1 obj;
             //CS0165  Use of unassigned local variable 'obj'
-            //obj = new Test1();
+            obj = new Test1();
             obj.Variable = 5;
             Console.WriteLine(obj.Variable);
         }

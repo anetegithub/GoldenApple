@@ -9,7 +9,7 @@ namespace GoldenApple
     class Test2<T>
     {
         /// <summary>
-        /// Lol
+        /// Observer
         /// <seealso cref="https://en.wikipedia.org/wiki/Observer_pattern"/>
         /// </summary>
         public event Action<T> StateChanged;

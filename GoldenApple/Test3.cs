@@ -7,8 +7,23 @@ using System.Threading.Tasks;
 
 namespace GoldenApple
 {
+    /// <example>
+    /// <code>
+    /// var logger = new FileSystemLogger("log.txt");
+    /// var test3 = new Test3(logger);
+    /// Console.WriteLine(test3.getString("some of us"));
+    /// </code>
+    /// </example>
     public class Test3
     {
+        ILogger<string> logger;
+
+        public Test3(ILogger<string> logger)
+        {
+            this.logger = logger;
+        }
+
+        [Obsolete("Use 'getString' instead",true)]
         public string GetString(string param)
         {            
             var sw = new StreamWriter("log.txt", true);
@@ -16,11 +31,10 @@ namespace GoldenApple
             sw.Close();
             return string.Format("Your param is {0}", param);
         }
-
+        
         public string getString(string param)
         {
-            var logger = new FileSystemLogger("log.txt");
-            logger.log(param);
+            logger.Log(param);
 
             return "Your param is {0}".f(param);
         }        
@@ -30,14 +44,9 @@ namespace GoldenApple
     {
         public static string f(this string s, params object[] args)
         {
-            //a little bit slower, but clearly
+            //a little bit slower, but more clearly
             return string.Format(s, args);
         }
-    }
-
-    public interface INotifier<T>
-    {
-        bool notify(T data);
     }
 
     public class ConsoleNotifier : INotifier<string>
@@ -61,9 +70,9 @@ namespace GoldenApple
         }
     }
 
-    public interface ILogger<T>
+    public interface ILogger<Tin>
     {
-        bool log(T data);
+        bool Log(Tin data);
     }
 
     public class FileSystemLogger : ILogger<string>
@@ -74,11 +83,14 @@ namespace GoldenApple
             this._filename = filename;
         }
 
-        public bool log(string data)
+        public bool Log(string data)
         {
             try
             {
-                File.WriteAllText(_filename, data);
+                var value = "{0:G} >> param = \"{1}\"".f(
+                    DateTime.Now,
+                    data);
+                File.WriteAllText(_filename, value);
                 return true;
             }
             catch (Exception ex)
